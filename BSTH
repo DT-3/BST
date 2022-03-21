@@ -1,0 +1,22 @@
+#pragma once
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+class BST
+{	
+private:
+	struct node* insertHelper(struct node* node, struct node* data);
+	void inOrderHelper(struct node* root);
+	struct node* deleteHelper(struct node* node, string key);
+	string minValue(struct node* root);
+public:
+	struct node* head = NULL;
+	BST();
+	void insert(string data);
+	void inOrder();
+	bool search(string str);
+	void deleteKey(string key);
+};
+
