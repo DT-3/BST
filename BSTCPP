@@ -1,0 +1,169 @@
+#include "BST.h"
+
+// Creates the node structure to make the BST easiser
+struct node
+{
+	string data;
+	struct node* left;
+	struct node* right;
+};
+
+
+// Default Constructor
+BST::BST()
+{
+	head = NULL;
+}
+
+// Public method insert that just takes in the data and calls the helper method
+// O(1)
+void BST::insert(string data)
+{
+	struct node* newNode = new node;
+	
+	newNode->data = data;
+	newNode->left = NULL;
+	newNode->right = NULL;
+	
+	head = insertHelper(head, newNode);
+}
+
+// Public method that follows calls its private helper method to traverse the tree
+// O(1)
+void BST::inOrder()
+{
+	//cout << "STARTING LPR AT: " << head->data << endl;
+	inOrderHelper(head);
+}
+
+// O(n) - method that returns true or false on whether or not the desired string is in the tree
+bool BST::search(string str)
+{
+	int cnt = 0;
+	struct node* temp = new node;
+
+	temp = head;
+
+	if (head == NULL)
+	{
+		cout << "There's nothing in this list?" << endl;
+		return false;
+	}
+
+	while (true)
+	{
+		if (temp->data == str)
+		{
+			cout << "Inspected " << cnt << " Elements" << endl;
+			cout << str << " located" << endl;
+			return true;
+		}
+		else if (str < temp->data && temp->left != NULL)
+		{
+			//cout << "LEFT" << endl;
+			temp = temp->left;
+		}
+		else if (str > temp->data && temp->right != NULL)
+		{
+			//cout << "RIGHT" << endl;
+			temp = temp->right;
+		}
+		else
+		{
+			cout << "Inspected " << cnt << " Elements" << endl;
+			cout << str << " does not exist!" << endl;
+			return false;
+		}
+
+		cnt++;
+	}
+}
+
+// O(1) - The method that deletes the desired value by using its helper method
+void BST::deleteKey(string key)
+{
+	head = deleteHelper(head, key);
+}
+
+/* The private helper method that recursively calls and gets the pointers
+pointing in the right direction*/
+// O(h)
+node* BST::insertHelper(struct node* root, struct node* newNode)
+{
+	// Checking to see if the tree is empty
+	if (root == NULL)
+	{
+		//cout << "Inserting: " << newNode->data << endl;
+		return newNode;
+	}
+	if (newNode->data < root->data)
+	{
+		//cout << "LEFT" << endl;
+		root->left = insertHelper(root->left, newNode);
+	}
+	else if (newNode->data > root->data)
+	{
+		//cout << "RIGHT" << endl;
+		root->right = insertHelper(root->right, newNode);
+	}
+
+	return root;
+}
+
+// Private helper method that recursively traverses and prints the data (LPR)
+// O(h)
+void BST::inOrderHelper(node* root)
+{
+	if (root != NULL)
+	{
+		inOrderHelper(root->left);
+		cout << root->data << ", ";
+		inOrderHelper(root->right);
+	}
+}
+
+// O(h) - helper method for the delete method
+node* BST::deleteHelper(node* node, string key)
+{
+	if (node == NULL)
+	{
+		return node;
+	}
+	if (key < node->data)
+	{
+		node->left = deleteHelper(node->left, key);
+	}
+	else if (key > node->data)
+	{
+		node->right = deleteHelper(node->right, key);
+	}
+	else if (node->left == NULL)
+	{
+		return node->right;
+	}
+	else if (node->right == NULL)
+	{
+		return node->left;
+	}
+	else
+	{
+		node->data = minValue(node->right);
+		node->right = deleteHelper(node->right, node->data);
+	}
+	
+	return node;
+}
+
+// O(n) - helper method for deleteHelper for finding the smallest value in the tree
+string BST::minValue(node* root)
+{
+	string min = root->data;
+
+	while (root->left != NULL)
+	{
+		min = root->data;
+		root = root->left;
+	}
+
+	return min;
+}
