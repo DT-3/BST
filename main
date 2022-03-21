@@ -1,0 +1,71 @@
+// Daniel Thompson
+// CST-201
+// 3/3/22
+// This is my own work
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include "BST.h"
+using namespace std;
+
+int main()
+{
+    // Variable Declaration and Intialization
+    BST bst;
+    string fileName = "text.txt";
+    string word;
+
+    ifstream file;
+    file.open(fileName);
+    
+    // While loop storing all the words from the text file to the vector
+    while (file >> word)
+    {
+        bst.insert(word);
+    }
+
+    file.close();
+
+    // Formatting
+    bst.inOrder();
+    cout << endl;
+
+    // While loop that runs until the user inputs -1 and searches for the desired word
+    while (true)
+    {
+        cout << "Enter a string to search for, or enter -1 to quit: ";
+        cin >> word;
+        cout << endl;
+        if (word == "-1")
+        {
+            break;
+        }
+        else
+        {
+            bst.search(word);
+        }
+    }
+
+    // Formatting
+    cout << endl;
+
+    // While loop that runs until the user inputs -1 and deletes the desired word
+    while (true)
+    {
+        cout << "Enter a string to remove, or enter -1 to quit: ";
+        cin >> word;
+        cout << endl;
+        if (word == "-1")
+        {
+            break;
+        }
+        else
+        {
+            bst.deleteKey(word);
+            cout << endl;
+            bst.inOrder();
+            cout << endl;
+        }
+    }
+}
